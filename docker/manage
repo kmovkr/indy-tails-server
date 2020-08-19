@@ -36,6 +36,11 @@ exportEnvironment() {
   export TAILS_SERVER_URL=${TAILS_SERVER_URL:-http://$DOCKERHOST:6543}
 }
 
+createFolder() {
+  mkdir -p ../server_tails_files
+  sudo chmod 777 -R ../server_tails_files
+}
+
 # =================================================================================================================
 
 pushd ${SCRIPT_HOME} >/dev/null
@@ -47,8 +52,9 @@ build)
   docker-compose build
   ;;
 start|up)
+  createFolder
   exportEnvironment "$@"
-  docker-compose up ngrok-tails-server tails-server
+  docker-compose up
   echo "Run './manage logs' for logs" 
   ;;
 test)
